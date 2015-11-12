@@ -9,6 +9,7 @@ app.get('/', function (req, res){
   res.sendFile(__dirname + '/public/index.html');
 });
 
+
 const port = process.env.PORT || 3000;
 
 const server = http.createServer(app)
@@ -17,4 +18,13 @@ const server = http.createServer(app)
                   });
 
 const io = socketIo(server);
+
+io.on('connection', function (socket) {
+  console.log('A user has connected.', io.engine.clientsCount);
+
+  socket.on('disconnect', function () {
+    console.log('A user has disconnected.', io.engine.clientsCount);
+  });
+});
+
 module.exports = server;
