@@ -2,7 +2,6 @@ const http = require('http');
 const express = require('express');
 const app = express();
 const socketIo = require('socket.io');
-const io = socketIo(server);
 
 app.use(express.static('public'));
 
@@ -17,4 +16,5 @@ const server = http.createServer(app)
                     console.log('Listening on port ' + port + '.');
                   });
 
+const io = socketIo(server);
 module.exports = server;
