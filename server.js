@@ -9,6 +9,7 @@ app.get('/', function (req, res){
   res.sendFile(__dirname + '/public/index.html');
 });
 
+var votes = {};
 
 const port = process.env.PORT || 3000;
 
@@ -27,11 +28,17 @@ io.on('connection', function (socket) {
   socket.emit('statusMessage', 'You have connected.');
 
   socket.on('message', function (channel, message) {
-    console.log(channel, message);
+    if (channel === 'voteCast') {
+      votes[socket.id] = message;
+      console.log(votes);
+    }
   });
 
   socket.on('disconnect', function () {
     console.log('A user has disconnected.', io.engine.clientsCount);
+    delete votes[socket.id];
+    console.log(votes);
+    io.sockets.emit('usersConnected', io.engine.clientsCount);
   });
 });
 
